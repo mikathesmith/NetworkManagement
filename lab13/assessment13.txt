@@ -1,0 +1,69 @@
+DNS using BIND 9
+
+Domain Information Groper (DIG)
+    successor of nslookup
+    dig +short www.isc.org
+
+Master Bind configuration file
+    acl clients   :a way to reference a set of clients using IP addresses or
+    DNS names. List part of an access control list, to control access to
+    various types of requests made to the server
+    
+    options
+        directory : where the zone files can be found by default. 
+        allow-query : specify which clients may query the server. Can be an IP
+        address or range, domain or access control list. 
+        allow-transfer : which clients may perform a zone transfer (output
+        which tells the receiver everything about a zone) 
+        allow-recursion: allows the DNS server to go and get the complete
+        answer to the clients question for caching name servers
+        forwarders : useful for smaller networks. Allows you to specify any
+        upstream DNS servers (eg ISP_, to improve performance
+        listen-on and listen-on-v6: where the server should accept packets
+        from. 
+        auth-nxdomain: enables the server to give authoratative answers in the
+        case of a lookup failing because it doesnt exist. Negative responses
+        can be cached, reducing amount of traffic going to root nameservers and
+        reducing latency in the DNS system (off by default) 
+
+    Forward zones
+        Specify the mappings from hostnames to IP addresses. 
+        Put into /etc/bind/db.localdomain
+        TTL: time to live, 3 days
+        ns1.localdomain. = nameserver which is authorotative for this domain. 
+        hostmaster.localdomain is the email address hostmaster@localdomain of
+        the person responsible for the zone. -> alias to a real person
+        SOA resource record contains various timeouts:
+            serial number: slave servers use this as a version number to find
+            out if they need to update. 
+            refresh: how often check for updated version of zone file
+            retry: if refresh failed, retry interval
+            expire" after this interval if no update, remove
+            negative or minimum: how long a negative result should be cached
+            for. eg when the record being looked up does not exist. 
+        Network resource records
+            NS - nameserver for domain (must be at least two NS records for
+            each public domain) 
+            MX - gives various mail exchangers that accept mail for this
+            domain. Each MX entry has a priority. 
+        Hostname, class, RR type, RR values 
+        A record and AAAA record 
+        DNS servers/nameservers work in pairs. A public domain on the internet
+        needs to have at least 2 nameservers and are referred to as ns1.domain
+        and ns2.domain. 
+
+    
+    Reverse zones
+        Mapping IP addresses to DNS names
+        used on servers for logging purposes and access control 
+
+
+Assessment 
+4. Would have to go through example name server, then ubuntu name server, whereas the other way round we could go through ubuntu name server and then narrow it down to example? Less matches for query ubuntu compared to example?
+
+What would need to happen if we wanted to change which server offered the ubuntu repository 
+load-balancing  
+
+
+
+

@@ -1,0 +1,38 @@
+Management of the server cosc301-server1
+    Administrator: Miss A. Laneous
+    Release Information: Linux Ubuntu (32-bit) Trusty 14.04.5 LTS
+    Recent changes:
+        03 April 2017
+        05 April 2017
+History: 
+    Hardware
+        CPU: Intel(R) Core i5-333OS CPU 2.7 GHx i686 
+        Memory: 15% usage of 7.36MB 
+        Kernel name: 3.16.0-77-generic 
+        Location: /System/scratch/mismith/cosc301-server.vdi
+        Default disk size is 8MB
+
+General Management
+    Filesystems
+        Only one disk in virtual system. 
+        Partitioning: Guided- use entire disk. 
+        SCSI3 (0,0,0)(sda) - 8.6GB ATA VBOX HARDDISK 
+        Version 3 interface at position (0,0,0) in the SCSI bus 
+        Two partitions: ext4 (our system) and swap (virtual memory) 
+        udev, tmpfs. sda1, VBoxShare, sr0
+
+    Network Interfaces
+        inside 192.168.1.1
+        outside 10.0.2.15  (DHCP)
+
+    Adminisration Rights 
+        Admin rights have the power to use sudo and are setup during
+        installation. 
+        Add an admin user to the sudo group by using adduser <username> sudo
+
+    Software upgrades
+        Modify /etc/apt/sources.list by adding:
+            deb http://gallardo.otago.ac.nz:3142/ubuntu/ trusty main universe 
+        Use sudo apt-get and apt-get dist-upgrade to upgrade packages
+
+

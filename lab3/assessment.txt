@@ -1,0 +1,27 @@
+2. What is significant about the address 127.0.0.1?
+   Localhost
+
+3. Given the network 10.0.0.0/16…
+//First 16 bits are dedicated to network ID. Prefix-length. Afterwards, start talking about the host ID. Each number in dotted quad represent 8 bits (total 32 bits) 
+//Host: any device which information can be sent or received. 
+//Network: sum of all 
+
+   Inside network: 10.0.0.1
+   Outside network: 10.2.0.1
+
+  // How many hosts could fit: /16 address, 2^16 hosts/networks - 256 x 256 networks/hosts? 
+
+
+10.0.0.0/16
+
+0000 1010 . 0000 0000 . 0000 0000 . 0000 0000  // 10.0.0.0
+1111 1111 . 1111 1111 . 0000 0000 . 0000 0000  // /16
+255.255.0.0
+
+16 bits for network, 16 bits for host address
+
+10.0.0.0 to 10.0.255.255
+10.1.0.0 to 10.1.255.255
+
+e.g. /8 -> 2^(32 - 8) = 2^24
+     /24 -> 2^(32-24) = 2^8  hosts

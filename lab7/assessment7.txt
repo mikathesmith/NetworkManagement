@@ -1,0 +1,56 @@
+Shell scripting
+- vim is in the vi family. 
+-to prevent auto-indenting, use <<:a>> in vim, hit return, paste with command V, press enter to ensure cursor at beginning of line, then hit Esc or ^C. 
+-sh = bourne shell, command interpreter which runs shell scripts (sh files) 
+-bash is an sh-compatible implementation, a superset of sh
+- find -print : 
+
+Scripting video:
+- mkdir -p create any parent directories needed
+- ~/bin, tmp, /local/share/geoscope
+- usr share - architecture independent files e.g. icons
+- ls -l, -la : all details 
+- PATH variable - specifies where to look for files by default. Edit .bashrc
+- $HOME expands to home directory, like ~
+- . is shorthand for source, internal shell command
+- :syntax on - color
+- ssh gallardo, logout 
+- bash is same on every system
+- execute bit needs to be set to run as command: chmod -x ~/bin/hello
+- routing table - Patricia Triae
+- | pipe into
+- which command finds directory of file
+- cut -d’ ‘ -f1: excludes first field of file, IP addresses
+- sort, uniq
+- touch to create a file that doesn’t exist
+- can specify file for cut, or by default stdin
+- bash $@ - special parameters. Expands to as many positional parameters/arguments that you pass to the shell script. 
+- 404 - web server saying the page doesn’t exist
+- -w the word 
+- grep: generates/filters output 
+- add -- to the end of svn remove
+- uniq -c 
+
+
+1. Create a script that is passed Apache server logs as input and creates a summary showing each unique client’s IP address as well as whether it is a local, domestic or international client. Basic application of geolocation = trying to find out which country a particular request is coming from. 
+- billing for traffic, domestic vs International
+- display unique IP addresses in access log 
+- ip-to-country.csv range of 32 bit numbers 
+- domestics.txt - NZ’s current set of IP addresses. 
+-Geolocation country prefixes
+   -Converts IP ranges from CSV to a list of prefixes for a particular country. 
+   -pass country code, rip through csv file, convert ranges to set of appropriate prefixes
+   -./geolocation_country_prefixes NZ < ip-to-country.csv | head -10 
+   -creates domestics.txt
+   
+-Ip classify - takes text in domestics.txt and locals.txt and will be given a list of IP addresses on stdin. 
+   -run as command, outputs same line with international/local
+   - takes in addresses on stdin, writes list of address,classification pairs. 
+   -
+- My script:
+   - cut out first field, sort input of IP addresses into a sorted list of unique IP addresses, classify each line according to ip_classify 
+   -produce a list of unique IP addresses. 
+   - 
+
+   -
+

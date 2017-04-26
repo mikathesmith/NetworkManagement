@@ -1,0 +1,18 @@
+COSC301 Lab 1
+
+1. sudo(8) and sudo_root(8)
+   Advantages/disadvantages of using sudo, and of leaving the root account
+   disabled.
+   -sudo allows a user to execute a command as the superuser.
+   -advantage - allows access to everything
+   -disadvantage - great power, great responsibility! Doesn't just affect you,
+    could affect large number of users. 
+
+3. How to ask questions the smart way - sysadmins
+   -Display that you have tried other options first and you have learned from
+    them
+   -Google search first and mention this when asking, what did you google
+   -Don't rush in finding the answer 
+   -Don't assume you are entitled to an answer 
+   -Search before asking on StackOverflow, subject specific headers
+   -make it easy to reply to you

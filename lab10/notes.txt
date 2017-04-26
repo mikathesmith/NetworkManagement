@@ -1,0 +1,19 @@
+Post Installation
+
+Inside interface = creates a dual-homed configuration whereby we can talk to
+both the outside world and internal network. 
+To test if a web server is working, retrieve a page to test the entire stack eg
+apt-get update
+
+Remote deliveries - configure basic NAT
+No address associated with hostname = failed to convert the internet name into
+an internet address.
+
+lsof -Pni : sees what is listening on the network
+
+A service is represented as a pair of <<protcol/port>> where protocol is either
+TCP or UDP and port is the port number. 
+daytime:*   listening on all IPv6 interfaces. 
+
+After modifying inetd.conf, use commands
+/etc/init.d/openbsd-inetd reload

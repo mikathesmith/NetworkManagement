@@ -1,0 +1,123 @@
+How support gets added to an IPv6 interface, how we can remove it if required and how we can control some aspects of how IPv6 configures itself. 
+
+Notes:
+-Kernel support for IPv6 is contained in a kernel module called ipv6.ko
+-Disabling IPv6 in Linux is tricky. 
+  -preventing the kernel module from loading
+  -unload the module from running system
+  -Ubuntu 14.04 LTS does not have a kernel module to unload as support is built in.
+   Instead, we can manage addresses on an interface using the ip tool to delete an address
+   attached to an interface. 
+  -Pass arguments to the IPv6 subsystem to prevent SLAAC generating addresses when IPv6 
+   support is loaded into the kernel. Find out what parameters are avalailable using
+   modinfo, or add them to the kernel command-line set by the boot loader GRUB. Edit GRUB
+   configuration and add “ipv6.disable_ipv6=1” and update-grub to delete all addresses 
+   on the given interface and disable IPV6
+
+-ifconfig -a shows all network interface configuration on your system
+  -eth0  : first ethernet interface. (NIC connected to network)
+  -lo    : loopback interface. A special network interface for communicating within the 
+	   system
+  -wlan0 : the first wireless network interface on the system 
+
+-SLAAC summary
+  - Join own solicited node group  MLDv2
+  - Generate and test link-local   NS
+  - Solicit router advertisement   RS RA
+
+
+
+1. Describe multicast in comparison to unicast and broadcast. Give an example of an IPv6 multicast address
+
+- Unicast is when information is sent from one point to another, from sender to receiver 
+  (LAN, Internet). 
+- Broadcast is when information is sent from one point to all other points (e.g. ARP)
+- Multicast is when information is sent from one or more points to a set of other points. 
+    - Multicasting requires that the same packet is delivered simultaneously to a group of 
+      clients and uses a special class of destination address which denotes a specific 
+      multicast group. 
+
+- ff02::1 - all-hosts link-local multicast address. Every host on the local network (local 
+  link: everything up to the first router) will be listening for traffic sent to this 
+  address. 
+
+
+2. Given an example of a link-local IPv6 address. Describe how it is generally formed from the Ethernet MAC address
+
+- A link-local address is an IPv6 unicast address that can be automatically configured
+  on any interface. It is valid only for communications within the network segment (link)
+  or the broadcast domain that the host is connected to.
+- IPv6 requires a link-local address on every network interface on which the IPv6 protocol
+  is enabled. 
+- Not guaranteed to be unique beyond a single network segment so routers do not forward 
+  packets with link-local addresses.
+- For IP networks, they are assigned using stateless address auto configuration. 
+- For protocols that only have link-local addresses such as Ethernet, we must derive  
+  automatically from the MAC
+
+- Prefix  fe80::/64
+- Example: fe80::a00:27ff:fe97:164a/64       first 64 bits are used in network address
+
+
+3. Give an example of a unique-local IPv6 address: 
+
+- Prefix   fd6b for unique local unicast address. 
+- Example  fd6b:4104:35ce:0:ac55:2606:750:f1bf/64
+
+
+
+4. Describe a solicited node multicast address. What is its purpose? Give an example. How is it formed?
+- A solicited node multicast address is an IPv6 multicast address valid within the local-link - e.g. an Ethernet segment. They are used in neighbour discovery protocol for obtaining the link-layer addresses of other nodes. 
+- In IPv6, Neighbor Solicitation replaces ARP, and it uses multicast solicited node addresses. 
+- Client 1 wants to send an IPv6 packet to Radv’s IPv6 link-local address (local delivery:   
+  does not go through a router)
+- It does not yet know Radvs link-layer address (layer 2) so it needs to look it up using
+  a ICMPv6 Neighbor Solicitation from Client1’s link-local IPv6 address to the solicited
+  node multicast address for the address that shall be pinged. It carries with it 
+  Client1’s link-layer Ethernet address. 
+- Radv responds with an ICMPv6 Neighbor advertisement from Radv’s link-local IPv6 address
+  to Client1’s link-local IPv6 address, carrying with it Fav’s link-layer Ethernet 
+  address, which Client1 puts into its neighbour cache. 
+- Client1 knows everything it needs to make the local delivery of this IPv6 packet, so 
+  sends the ICMPv6 Echo request (ping) from Client1’s link-local IPv6 address to Radv’s 
+  link-local IPv6 address. 
+- Radv can now send the ICMPv6 echo response packet. 
+
+
+- Prefix:  ff02::1:FF /104 
+- Eg interface with IP address fe80::2aa:ff:fe28:9c5a has solicited node multicast address
+  of ff02::1:ff28:9c5a
+
+
+
+5. Multicast listener discovery version 2 (MLDv2) snooping is a mandatory feature for any switch that wants to support IPv6. What is the motivation for MLDv2 snooping (IPv4 equivalent is IGMP snooping) with respect to network switches? 
+
+- MLD is used by IPv6 routers for discovering multicast listeners on a directly attached 
+  link and to discover which multicast packets are of interest to neighboring nodes.
+- Constrains the flooding of IPv6 multicast traffic on VLANs.  
+- Edge devices tell their local router to subscribe to a various IPv4/Ipv6 multicast address. 
+- The switch can snoop on MLDv2 protocol packets and bridge IPv6 multicast data based on destination multicast MAC addresses. 
+
+
+
+6. Describe the most important components of a router advertisement.
+
+- Router advertisements are used so that a host on the network can learn about their local 
+  routers to find appropriate source and destination addresses to attach to the 
+  advertisement packet. 
+- Routers periodically send out RAs, which can be solicited to avoid waiting. 
+- ICMPv6 Type will specify the management protocol of different messages it could transmit 
+  (type is 134 in a router advertisement)
+- ICMPv6 Flags (managed (set=DHCP, not set=SLAAC), other)
+- ICMPv6 prefix length (if SLAAC, then advertised prefixes are /64), flags (auto, 
+  set=SLAAC). 
+-  The most important piece of data is the prefix, i.e. the address being advertised.   
+
+
+
+7. Describe Duplicate Address Detection (DAD). Why is it needed and how is it performed? What do you think is the difference between a tentative address and a preferred address, with regard to DAD? 
+Asks the network if any other host has the same address, if they do they respond, if not after some time, it expires. 
+
+- After generating an address, send a neighbour solicitation to solicited node multicast 
+  address. 
+- If anyone answers, its a duplicate and we can’t use it. 

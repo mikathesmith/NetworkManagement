@@ -1,0 +1,57 @@
+System Installation and Basic Administration
+-dont include defaults
+-up to date, list of revisions dated
+-what does this system do? What has it done in the past?
+-server-class and desktop-class OS
+-core server daemons dont change much over time compared to desktop software,
+and servers dont need or run desktop environments
+-Differences between client OS and server OS
+-Deploying using disk images
+    Norton Ghost 
+    Sector based images: copying each sector on disk, dont care about
+    filesystem used
+    Filebased imagers: understand particular filesystems, create smaller images
+    and offer richer features. 
+    The machine to be imaged is prepared, removing any temp files,
+    defragmenting the filesystem and zeroing out any free-space. 
+    Write a file containing zeroes to the disk - the file will be written until
+    all the space is consumed - compresses nicely (dd approach)
+    Imaging program is run from a bootable CD (not from the system you are
+    imaging)
+    - Create image file, store on network, compressed, run in reverse; writing
+      disk image contents onto a selected hard disk. 
+    - Boot each machine you want to deploy into the imaging software then
+      multicast from the imaging server to all the clients 
+-Scripted Installations
+    -Booting from the  network or providing some install time parameter that
+    points to a set of answeres, retrived via HTTP
+-Golden Client Methodology
+    -SystemImager, Radmind
+    -Run software which upload all the files to a server. Run an initial
+    install-client on the machines you want to deploy onto, dowloading the
+    files fom the server. 
+    -Make updates to golden client, run the agent on the GC to synchronise the
+    changes up to the server. 
+    -all other clients run a differencing engine to sync
+-Maintenance 
+    -Numerous disk images, installation scripts or a golden client
+   
+   
+-Disk usage (du) and disk full (df)
+-awk filters the ouput, 
+
+Sources.list file
+-deb - describes a binary debian package (deb-src - source debian package)
+-URI - where packages are found (HTTP, FTP, CDROM, filesystem) and a host for network-oriented access methods. Optional port number (default for HTTP is 80). Where on the server the Ubuntu archive canbe found (/ubuntu)
+-release - version of Ubuntu we are installing. Trusty - codename for Ubuntu 14.04 LTS, trusty-updates are major software updates representing changes between point releases
+-section - main, restricted, universe, multiverse, for licensing and support. 
+
+Client CPU and memory: less multiprocessing capability compared to servers systems. It is a simple and less powerful machine with basic hardware configuration. 
+
+Client access: a client supports a single user login at a time and accesses a server through a network. Eg in an enterprise envrionement, an employee logins in to the client machine to access files and applications running on a server machinbe,. Client connects ia a network to a server, which offers services through ports beyong the server’s network address. 
+
+Client licenses: Client access license (CAL) is a commercial software license allowing clients to connet to server software and use their services. Licensed so that payment is required for each installation or for each concurrent use. For example and purchasing 10 CALs for an instance of WIndows Server 2003 allows 10 concurrent connections. CALs apply to either a device or a user. Windows Client operating system license do not permit multiple users to access one licensed copy of the software simultaneously. 
+
+Client management:  Windows 8 Client OS management pack provides monitorying basics. SImplified deployment, integration features, virtualisation tools, 
+
+Server security: Security-focussed OS’s are available with the major goal of a secure computing environment,. 

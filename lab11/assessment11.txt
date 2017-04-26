@@ -1,0 +1,89 @@
+Scheduled Tasks and Log Management
+Cron
+    running jobs at scheduled times
+    fetching mail from ISP, download package updates at night, check system etc
+    crontab edits your Cron Tabe. 
+    run-parts: a helper program that runs all executable scripts in a directory
+    crontab -e to modify or create a crontab
+    entries can be thought of as being checked every minute. 
+
+Syslog
+    rsyslogd program 
+    reliability enhanced logging protocl (RELP)
+    Rsyslogd sits in the background, waiting for any program to give it a log
+    entry
+    Program will speicify a facility and priority
+       Eg facilities - auth, cron, daemon, kern, mail
+       Priorities range from debug to warning, err, emerg
+    /etc/rsyslog.d/l reload rsyslog
+    Facility priority = selector
+    Logs are kept in /var/log 
+         Mesages
+         Syslog
+         Secure
+        Utmp, wtmp, failog
+
+Lab 11 assessment
+11.1.1
+When will the following crontab entries run? 
+1. Every 13th of jan
+2. Every 30 minutes at 4:00am every 1st and 15th of month on a friday 
+3. Virtualisation host with a lot of guests. How could you improve the situation where cron jobs are starting at the same time, causing the host to be very busy? Massive spikkes.  
+    Could change each cron job to run at different times of day, avoiding
+    massive spikes
+
+11.3.1
+1. Write logrotate entry that rotates the file /var/log/auth.log on a weekly basis. 
+    
+    /var/log/auth.log {
+        missingok #wont throw a fit if the file is not there
+        weekly    #rotate weekly 
+        rotate 4  #keep backlog of 4 weeks, might be useful security info
+    }
+
+2. Describe what happens to the files in /var/log when they are rotated, 
+   based on the pattern you find from the outputs
+    
+   Adds another line each time saying pam_unix(sudo:session): session closed
+   for user root,  and increments auth.log. Most recent ones have .gz suffix. Prints out all the files
+   matching auth.log* with their name and first 60 characters.  
+
+3. What would be a good thing to do with archived logs? What factors might you need to take into consideration?
+	Store in memory for a specified time. Consider memory space and logrotate rate, throughput of
+    logs. 
+
+Filtering logs
+	Look at various patterns in logs, or filter the mundane entries from the logs. 
+/etc/cron.d: logcheck 
+
+1. At what times is logchek run by crond? Explain how logcheck is being run; explain nice and -R
+    
+    logcheck runs as an hourly cronjob just off the hour and after every
+    reboot. 
+    0/342assignment1/peg16.blend
+    a 342assignment1.mismith.170410.112930/342assignment1/Mika_PegPhoto.png
+    a 342assignment1.mismith.170410.112930/342assig-R adds reboot to the email subject line
+    nice ...? 
+
+2. Why should logcheck be run as the logcheck user and not root or mal? What sysadmin principle does this illustrate?
+
+    It does not require root/sudo permissions therefore you should not use them
+    - great power = great responsibility, don't use if not necessary! 
+
+Regex
+	Pattern that matches text
+    Logcheck uses POSIX extended regular expression syntax
+    Grep uses POSI basic syntax
+
+1. Transform the following two log messages into egrep style regex for use with logcheck 
+
+egrep -i '^\w{3} [ :0-9]{11} belgarath sshd\[[0-9]*\]: Accepted publickey for
+[a-zA-Z]* from 10\.18\.2\.[0-9]+ port [0-9]*. ssh2'
+
+egrep -i '^\w{3} [ :0-9]{11} belgarath su\[[0-9]*\]: + \?\?\? root:nobody'
+
+
+Note: to access shared folder VBoxShare in lab9 folder, go install guest
+additions in virtualbox settings and sudo -a mount
+
+

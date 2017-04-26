@@ -1,0 +1,37 @@
+Video Notes
+-WAO - work area B, B31 and B32 
+-Telecommunications closet A, rack A and row 2
+-Patch panel and port 8
+-Switch 1 and port 11
+-MAC address of station - 00:0d:93:b2:43:a0 (inventory database, DHCP) 
+   Two connected devices operating in different duplex modes (e.g. one in half duplex the 
+   other full) resulting in an inefficient link. Caused by manually setting two connected  
+   network interfaces at different duplex modes, or by connecting a device that performs 
+   autonegotiation to one that is manually set to a full duplex mode. 
+Each WAO has two ports - one is Ethernet, the other can be for anything. Each WAO has     
+   an identifier prefixed by work area identifier. Telecommunications closet. Behind the 
+   faceplate is a piece of UTP. 
+   Wall end of patch cable plugs into one of the sockets in a face plate which should have   
+   at least 2 WAOs to help to identify the cable.    Need to record the WAO(work area outlet) identifier and the MAC address of the station 
+   so a connection can be made and an address assigned. 
+   Patch/network cable - one end connected to Ethernet. Made of stranded core (less susceptible to breaking)
+
+
+1. Identify the particular basic link that leads to the computer in the video
+   02B-1-2-8/B31
+
+2. Why can labelling WAO to identify the other end of the cable be useful?
+
+   Speed up setting up connection if the patch panel and cable are labelled the same. 
+
+
+3. What might happen when a duplex mismatch occurs? 
+
+   Communication is still possible - single packets are sent and acknowledged without  
+   problems. There is a problem when both ends of the connection attempt to transfer data 
+   at the same time or in large data transfers (multiple packets, trigger ACK, data sent 
+   in both directions, collision! Sends a jamming signal then retries through CSMA/CD) 
+
+   Would a ping test be likely to demonstrate the presence of a duplex mismatch? 
+   A ping command would fail to detect a duplex mismatch because single packets and their 
+   ACKs do not cause any problems on the network. Instead, send large amounts of data and  see if a jamming signal is received? Speed test - check throughput. 

@@ -1,0 +1,90 @@
+Notes:
+
+- Roaming: move between the presence of multiple access points and still stay connected. 
+- Directional links: for hooking up branches of network that are not in the same building 
+  (could use VPN)
+- Wireless difficult to troubleshoot when dealing with reception and interference issues
+  and have security risks - steal internet bandwidth, trace (possible illegal) activity to
+  your IP address, break into computers inside the network for stealing data, viruses. 
+- WEP -> WPA2 
+- Most things that absorb radio frequencies are walls and metal furnitue
+- Interference Robustness enabling = tells the device not to use the 1Mbps bit rate
+- RTS/CTS for the hidden node problem - N1 and N2 can see AP1 but can’t see each other. N1 
+  sends a short RTS, only sends data when AP1 sends CTS. Use an RTS/CTS threshold for 
+  packets of a certain size. 
+- Configuring Access points: embedded web-server. telnet or SNMP ->Reset to a factory default 
+- Access points have an IP address for management purposes: hostname, address, subnet mask, gateway and DNS details. Every AP has the capability to act as a bridge, or to share
+one address between everything behind a NAT. They also offer simple DHCP services for 
+distributing addresses to clients or to get an address for themselves. Can also act as broadband routers. 
+- ESSID/SSID - name of wireless network. 
+- Access points offer a feature called a closed network, where the ESSID is not advertised, though anyone with a wireless packet sniffer can easily detect it. 
+- Channels - 802.11b/g devices use three contiguous channels (selecting channel 4 also 
+  selects 5 and 6). Use channels that don’t interfere to reduce bandwidth. 
+- Client/Supplicant supplies information to Access Point/Authenticator, which talks to the 
+  authentication service/RADIUS server. 
+- SNMP trap alert messages can be sent if someone tries to logon to an AP unsuccessfully
+- Syslog server: log events such as attempts and errors
+
+1.
+
+2. Imagine you are setting up a wireless network for a client. How might you evaluate the reliability of your network? You should think about the factors that impact the performance of the network in comparison of wired networks.
+- Speed test for internet bandwidth
+- Ensure minimal interference (avoid walls and metal furniture) 
+
+3. Add notes for 802.11ac to Table 5.1
+- IEEE 802.11 Standards = LAN based protocols. 
+   -802.11b: 11Mbps
+   -802.11a: higher frequency, less interference with other consumer devices, better 
+    performance. Shorter wavelength affected by obstacles, uses more battery power when
+    transmitting. Need different antennas. 
+   -802.11g: 2.4GHz, susceptible to interference. 11g access points can slow the network 
+    down to 11Mbps when an 11b client is present. Can make exclusive 11g client networks 
+   -802.11n: enabling technology for wireless multimedia, e.g. HD video. Can use both the 
+    2.4GHz and 5GHz frequency bands, or configured to not use one particular band. Twice
+    as many channels are used = Channel Bonding. 3 antennas for MIMO, taking advantage of 
+    spatial multiplexing to send to two different games at the same  time and doubling the 
+    throughput. Better performance indoors due to multi-path interference.  
+   
+   -802.11ac: providing high throughput WLANS on the 5 GHz band, 256-QAM modulation 
+    squeezing 256 different signals over the same frequency. 
+
+4. Suggest a location for a single access point to satisfy the needs of the site survey
+- Ground floor lounge as it has a reasonably clear pathway to the rooms upstairs through
+  the staircase, which all first floor rooms surround. 
+
+
+6. Explain the relationship between WEP, WPA, WPA2, and 802.11i.
+
+- WEP (Wired equivalent privacy) is a poor security protocol that uses a pre-shared key 
+  to control access and encrypt the packets in the air. Updating key takes a long time, 
+  does not change keys periodically, easily break key with enough packets. 
+- WPA (Wifi protected access) - an improvement on WEP, still uses RC4 but changes the keys
+  periodically using TKIP (temporal key integrity protocol). Key timeout set on AP is 
+  default 60 mins (should be 15mins). Two authentication architectures: pre shared key 
+  variety called WPA-personal, and a centralized authentication called WPA-Enterprise.  
+	-WPA-personal: WPA-PSK, passphrase handled uniformly. Attackers would have to 
+         factorise a large number to find the WPA passphrase. 
+	-WPA-enterprise: uses 802.1X and RADIUS to authenticate users. Reduce timeout. 
+- WPA2 is similar to WPA except it implements the full 802.11i standard. Higher level of 
+  protection as it uses AES. 
+- WPA is a subset of the 802.11i standard - fairly compatible with most existing hardware and drivers. 
+
+
+6b. Explain the relationship between RADIUS, 802.1X, EAP and EAP-TTLS.
+- EAP (Extensible authentication protocol) comes from dial-up networking. EAP can be used
+  for other network authentication tasks. 
+- EAP-TTLS (tunneled TLS) is a module that EAP uses as an authentication mechanism in 
+  wireless security. It uses an outer and inner authentication protocol. Digital certificates? 
+- RADIUS (remote authentication dial-in user service) is used between the AP and the authentication service, that knows about the users and authentication mechanisms
+- 802.1X - adapted from EAP, used between the supplicant and authenticator
+
+
+
+7. WiFi Protected setup - makes it easier to setup a secure wireless connection. How does it work? Describe PIN and PBC methods. 
+- (Belkin) Wifi Protected setup (WPS) is the industry standard to simplify the security
+  setup and management of WIFI networks. You can easily connect to a 802.11 network with 
+  WPS-certified devices using a personal information number (PIN) or push button 
+  configuration (PBC) method. 
+- PIN: used to make sure the intended device is added to the network, and no others.  
+- PBC: connect multiple devices and enable data encryption by pushing a physical button on
+       the router. Be aware that other devices could connect in the 2 minutes. 

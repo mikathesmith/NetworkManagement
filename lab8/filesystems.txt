@@ -1,0 +1,178 @@
+Lab 8: File Systems 
+-Unix filesystem is a tree structure: one root /
+-no drive letters. 
+-every filesystem you use is mounted onto a directory of the filesystem
+-Unix filesystems are inode based. Inode is a number that points to the data.
+Directory entries point to an inode. A hard link is created using the ln
+command and creates another directory entry that points to the same inode. ls
+-li to display the inode column. 
+-less to pipe large amounts of output. 
+-du -s directory to measure disk space the contents of directory consumes. 
+-Symbolic links/soft links/symlinks - similar to shortcuts. When a program pens
+a symbolic link, it opens the file it points to. created with ln -s command. 
+-Design philosophies of Unix is that everything is a file. 
+-devices are represented as a device node in /dev with a major:minor number
+-major number: device, minor number: particular partition on device 
+-Unix domain socket: similar to IP socket but entirely local to machine. Can
+pass open files and credentials.
+-A server process would create a socket file as its socket address. Created
+automatically when a program binds a socket to the file with the system call
+bind. 
+-Anonymous pipes: allow output of one process to be fed into the input of
+another.
+-Pipes are unidirectional. Sockets are not. 
+-Named pipes: mkfifo, create flexible pipe useful in shell scripts. 
+-File hierarchy
+    -/bin: don't require administrative rights, eg ls, mkdir
+    -/sbin: supervisor programs eg mount, ifconfig
+    -/lib: libraries needed when system booting, eg kernel modules
+    -/usr: static data, software installed, eg include, local, share, src
+    -/var: varaible data eg databases, mail queues, logs, eg log, pid, mail
+    -/etc: configuration files
+    -/dev: device special files
+    -/tmp: temporary directory anyone can write to.
+    -/proc & /sys: virtual directories, process information
+    -/root: home directory of root user
+    -/home: home directories for users. Network mounted. 
+Assessment
+1. Write down the ls command you would use to do the following:
+a. List contents of your home directory recursively.
+   ls -Rl 
+
+b. List all files, including hidden files and directories, in your home
+directory non-recursively. These are ones that begin with a dot and are not
+usually shown in ls output. 
+    ls -a
+
+c. List the contents of /lib using ls -l /lib. 
+   What is meant by <<foo -> bar>> notation?
+
+   Setting library path? eg libz.1.2.8.dylib -> libz.1.dylib
+
+d. List the files in your home directory, with file sizes
+   
+   ls -lh 
+
+e. List the info about a directory, without ls recursing into that directory.
+eg permissions but not contents. 
+
+   ls -d
+
+-Filesystem permissions
+    -Attach an access control list to files and directories. 
+    -read, write, execute, can be applied to the user a file/directory belongs
+    to, the group that it belongs to, and everyone else. 
+    -first character: what kind of filesystem object it is, next 3: permissions
+    for user, next 3: same group, last 3: everyone else. eg -rw-r----- (user
+    can read and write, group can read)
+    -changing owner: chown and chgrp, two syntaxies: symbolic and octal
+    -Symbolic: only need to change some of the permissions, chmod u+x, -r (all),
+    ug+r, u=rw, g=rw, o=r
+    -Octal: cannot grant or revoke individual permissions. Each permission set
+    for u,g and o takes three bits, so digit between 0 and
+    7 inclusive. For each digit, read=2, write =2, execute =1 eg -rw-rw-r-- has
+    permissions 664, chmod 755 has permissions -rwxr-xr-x
+    read and write but not execute = 4+2=6
+-Special permissions - 4th octal bit (eg 2775, 2 is special permission) 
+    -SetUID - on an executable binary file lets program run as the person who
+    owns the file. Turned on using chmod u+s = s in execute bit of user 
+    -SetGID - run with the priveledge of the group that owns the file. Useful
+    for group work. Can use umask to allow group read/write files. chmod g+s.,
+    value 2. s in execute bit of group permissions. 
+    -Sticky bit - when set on a directory, it means only the user who created
+    an item inside of a sticky directory can delete it. This is seen in the
+    /tmp directory (octal mode 1777).  chmod +t, value 1. shown in other
+    execute permission. 
+A
+8.2.3
+1. Fill in the blanks to convert between octal and symbolic notation
+   
+   Octal       Symbolic
+   644         rw-r--r-- 
+   751         rwxr-xr-x
+   1777        rwxrwxrwt //sticky bit
+   4755        rwsr-xr-x
+   3070        ---rws--t //what does 3 mean?  suid = 4, sgid = 2, sticky = 1
+   2060        ---rwS--- //what does S mean, SetGID set, group cannot execute? 
+
+2. The files in /var/games/ need to be updatable by the games when run as
+different users. We dont want users to be able to edit by themselves, only by
+the games that the user is running. Looking at these permissions, describe how
+this works. Users are not meant to be in the games group to play games. 
+    
+    /usr/games - users are able to read, write and execute, group is able to
+    read and execute, other is able to read and execute. If the user is in the
+    games group, they are able to have group privelages to execute. 
+
+    /var/games - users and groups are able to read and write, other are able to
+    read. 
+
+3. Assume you see a directory which ls -l describes as «drwxrwsr-x». Write a
+paragraph to completely describe the effect of this permission set. 
+
+    2775
+    This is a directory(?) which has full permissions for the user and group,
+    but only read and excecute permissions for other. The lowercase s bit in
+    the group permissions states that the SetGID bit is set, meaning it can be
+    run with the privelege of the group that owns the file, and that it still
+    allows group users to execute. 
+
+4. Give a default unmask value and describe its effect. 
+    -When a file is created, the permissions that it gets are 666 (for files)
+    or 777(for directories0+), minus the umask value. 
+    -The umask value turns off various bits in the permission set in order to
+    make the default permissions for new files safe. 
+    -default umask value = octal 022, files created have permissions octal 644
+    by default (rw-r--r--)and directories octal 755 (rwxr-xr-x).
+
+Archival and Backup
+-Archiving = never intending to be deleted. Backups= scheduled and rotated. 
+-tar command takes a directory or a list of files and package it as a single
+file. Then passed to a compressor. Process reversed to get the files out. 
+-tar has three modes: create, list and extract (x) 
+
+
+8.3.3
+1.Create a backup of Mal's home directory. 
+-c= create an archive, f=specify output file, v=verbose output z=passes output
+through gzip, t=list contents of tar archive, x= extract contents
+ 
+ tar -zcvf /mal-backup.tar.gz
+
+2. How can you fix the problem of security in tar using umask?
+    
+    umask default 066 should set permissions to 600 so that groups and other
+    are not able to read,write or execute the file at all (adjust first value if
+    wanting to change user's permissions). 
+    
+    $ umask
+    0022
+    $ (umask ...; tar ...)
+    $ umask
+    0022
+
+3. Have a look at the homepage of rdiff-backup. Compare features of it the
+features we desire. Do you think rdiff-backup meets our stated needs? 
+-file synchronisation tool that backs up one directory to another, but extra
+reverse diffs are stored in a special subdirectory of that target directory, so
+you can still recover files lost some time ago. The target directory ends up a 
+copy/mirror of the source directory, combining best features of a mirror and an
+incremental backup. 
+-Can operate in a bandwidth efficient manner over a pipe, like rsync. 
+-Can use rdiff-backup and ssh to securely backup a hard drive to a remote
+location, where only the differences will be transmitted. 
+
+-Requirements
+    Remote -YES
+    Cheap - ? 
+    Plenty snapshots -YES? 
+    Easy to restore - YES? 
+    Secure - SSH itself is secure, rdiff default not, add --server and
+    --restrict* to avoid instances where the server is run as root and an
+    attacker who compromised the client uses rdiff-backup to overwrite server
+    files by backing up over them. 
+    Maintain file meta-data - YES? 
+    Selection of items to include/exclude- YES
+    Large files - NOT REALLY - must specify max file size to disable
+    compression for 
+
