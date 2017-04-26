@@ -1,0 +1,91 @@
+Apache
+-reverse zones only contain canonical names, not aliases
+-We need to give Apache a few details on how it shuld run and enable the use of
+PHP
+-Debian based systems modularise the Apache configuration directory to a
+great extent to make it easier to add drop in functionality via packages to the
+webserver without requiring an administratoyr to manually edit config files
+-
+
+Debian.gz
+    apache2.conf - main config file though does not include any actual
+    configuration, so dont touch it. 
+    ports.conf - configuration directives for which ports and IP addresses to
+    listen to 
+    magic - mod_mime_magic
+    envvars - contains environment variables that may be used in the
+    configuration. User and PID file go in here so other scripts can use them.
+    Change default settings used by apache2ctl, including ulimit value for max
+    number of open files. Default LAND=C setting to change language
+    conf-available  - included in the global server scope by include line in
+    apache2.conf. Add additional configuration directives here with a .conf
+    suffix, use file names starting with local- \
+    
+    conf-enabled : 
+    mods-available - contains .load and .conf files to load and utilise modules
+    mods-enabled - 
+    sites-available - contains config directives for different virtual hosts
+    that might be used with apahce2. 
+    and sites-enabled - contains symlinks to sites in sitesavailable. Defualt
+    site should be called 000-default. 
+
+-CGI (Common gateway interface) module defines a way for a web server to
+interact with external content-generating programs to put dynamic content on
+your website using any language
+-server generally does not start as root except at the beginning where it binds
+to port 80 to start helper processes. The helper processes that actually serve
+the content run as the user www-data BECAUSE.... it does not require root
+permissions, sets APACHE_RUN_USER and _GROUP as www-data in envvars file. 
+-dual stack = server runs both IPv4 and IPv6 . IPv4 can still pass through IPv6
+sockets across the network
+- The kernel can translate an IPv4 connection as an IPv4-mapped-Ipv6 address. 
+-Makes it easier to create network services because you only have to care about
+IPv6 and not Ipv4. 
+
+- go to http://localdomain/ on a browser on the client to test the webserver
+
+
+Virtual hosting
+-allows one server to host many different website
+-the server must know which site the client is visiting. There are two
+different mechanis,s for this: 
+    -each site has a different IP address (IP based virtual hosts), server will
+    be assigned many different IP addresses. Waste of space! (good for HTTPS)
+    -Named-based virtual hosts, meaning the client sends along a <Host> header
+    which specifies the name of the server it believes it is talking to, which
+    it retrieves from the hostname portion of the URL. Not widely available for
+    encypted web traffic. SSL certificate is locked to the fully qualified host
+    name the client is connecting to. The SSL session is established before
+    HTTP, so no Host header will have been sent and the server wont know which
+    certificate it should use. 
+
+-Use telnet to interact with the web server using HTTP. 
+-here we refere to the HTTP version 1.1 protocol 
+-telnet localdomain. 80 - connect to port 80 on web server
+-GET/HTTP/1.1 - retrieve the document corresponding to /, ie index.pho. Specify
+HTTP 1.1
+-Host: localdomain is the host header. This is what the server can use to
+determine the site being visited, as the client puts the name of the server it
+thinks it is trying to connect to here 
+-Blank line: done sending headers
+-HTTP /1.1 200 OK Blank line: the server sends us back a set of headers
+folllowed by a document. The request was processed fine (or 404 page not found) 
+- Timeout at end: the server is doing pipelining, which means we can make
+  multiple requests per connection, making the transfer much faster. Connection
+  stays open to allow client to send through another request and avoid TCP
+  connection setup and termination. After a while with no input, connection is
+  closed. 
+
+-limit access to material on your web-server using mechanisms such as IP
+address ranges, or username and passsword. 
+-Basic(encodes username and pw values using Base64) and Digest(MD5 digest hash
+of the username and pw) authentication mechanisms
+-Use SSL/TLS to transmit data 
+-
+
+Assessment:
+- Why does the web server run as the user www-data? What rights does that user
+  have to the web page content? 
+
+-Find some best practices for securing Apache and write down at least 5 of them
+
