@@ -1,0 +1,25 @@
+Internal Routing
+-Vyatta is our routing engine. 
+-Virtual LANS - implement network topology. 
+-Investigating static routing and the use of the RIP routing protocol 
+
+    
+Broadcast Domains
+    Everywhere a data-link level ethernet broadcast frame would propogate to
+    This area is demarcated by routers, which signal the end of a layer-2
+    (data-link layer) network, to go further requires support at a higher
+    layer, such as layer-3 (eg IP) to route the packets through the
+    inter-network. 
+
+Collision Domain
+    What you have in a mixed ethernet segment, such as on a repeating hub. On a
+    switching hub, the collision domain is simply the basic link between the
+    host and the switch, typically a single cable, because the basic link is
+    not shared between hosts, there are no other stations to contend for access
+    to the physical medium. 
+
+VLANS
+    The ability to segregate a switch into seperate broadcast-domains. Tio get
+    between the different VLANS, a router must be used. 
+    Layer-3 switch: a high-speed router embedded as part of the switch 
+    VLANs identified by a 12-bit number. 

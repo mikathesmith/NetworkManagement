@@ -1,0 +1,65 @@
+Email
+-Exim is a MTA (mail transfer agent) that is largely sendmail compatible. 
+-Sendmail is a very old but powerful MTA - default in Debian GNU/Linux
+-DebConf asked us questions for Exim configuration
+-How the configuration files can be managed as there a number of choices with
+different tradeofs. Write down three ways that Exim configuration can be
+managed under Debian: 
+- exim4 -bP | less to see configuration elements of Exim 
+-/etc/init.d/exim4 stop start
+-Exim logs file in /var/log/exim4
+-use tail -f /var/log/exim4/mainlog 
+-use mailq on server to see mail queue with messageID - yet to be delivered
+
+-Envelope header is not the same as message header
+-When the message to a mailing list or alias gets received by the mail server,
+the server will explode the message, so one message will go to each member of
+the list, with the envelope header set to that individual's email address, but
+the message header (To:) set to the mailing-list address
+-Forging headers
+    Envelope MAIL FROM and message FROM and TO are commonly forged to try and
+    hide tracks of spammers. 
+    Received headers are routinely manipulated to make it harder for people to
+    trace the spam back to where it came from. 
+    -Sites should have a monitored email address abuse@domain that email
+    messages about abuses such as spam or intrusion activity should be sent to. 
+
+POP3
+    apt-get install dovecot-pop3d
+    sudo service dovecot restart
+    POP3 is generally a clear text protcol, meaning passwords can be captured
+    fairly easily. Protocol has been extended to use other authentication
+    protocols instead of just plaintext usernamen and password. 
+    -The Dovect server is able to get email from many different places, and so
+    we need to tell it where it can find the messages for each user. 
+    POP is used for pulling mail off the mail server. 
+    -As with all clear-text protocols containing private data, it would be wise
+    to use some sort of secure tunnel such as SSL. Some people use ssh to setup
+    a secure tunnel to the server. 
+
+7. Assessment
+1. Speak to PO3
+2. Create a short list of the biggest differences between IMAP and POP3
+    POP3
+        Downloads email from a server to a single computer, then deletes it
+        from the server. It can appear that mail is missing or disappearing
+        from your inbox if you try to check your mail from a different
+        computer. 
+        Stored locally on PC, not a mail server 
+
+    IMAP - Internet Messaging Access Protocol
+        Can use multiple computers and devices to check your email
+        Mail is stored on the server, sent mail stays on the server so you can
+        see it from any device. 
+
+
+3. Configure a typical GUI email program such as Thunderbird on Client1 to
+access the POP3 and SMTP services on Server1. Considering the options you saw
+when setting up the account, what further improvements can be made? 
+    Change security settings authentication method to encrypted password or
+    something else. 
+    Leave messages on server for certain amount of time, empty trash at exit
+    Digitally sign certificate to ensure your identity
+    Encryption certificate to encrypt and decrypt messages sent to you 
+    Connection security of outgoing server SMTP 
+

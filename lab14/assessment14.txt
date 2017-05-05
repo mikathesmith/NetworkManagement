@@ -1,1 +1,46 @@
-DHCP
+DHCP= Dynamic Host Configuration Protocol
+-DHCP for automatic IP address assignment, only for IPv4 
+-centralised administration
+-compatible with BOOTP
+-efficiently use a shared pool of addresses 
+-dynamically allocated addresses have a lease time period before they are
+reassigned, automatically allocated address can be assigned to the same client
+as it keeps a table of past IP addresses and their clients MAC addresses. 
+
+How it works
+-Client broadcasts UDP request to 255.255.255.255 port 67 -> routers relay
+-The first DHCP server may send an offering (one in each subnet/broadcast zone)
+
+-ISC - internet software consortium DHCPd software
+-should house DHCP service on diffeent server to DNS service server
+-offer a pool fof addresses listed in DNS 
+
+
+-ddns-update-style: update the data in the effected DNS zones when we issue a
+lease by telling the DNS server the new values ie DYNAMIC DNS. 
+-option domain-name & option domain-name-servers: DNS-related configuration
+details we give to the DHCP client machines. The DHCP server resolves these
+names at startup. 
+-authoritative: server contains knowledge to tell clients when they are
+requesting something that is invalid. - important for portable devices -
+responds with a DHCPNAK which tells the client it must reject its current lease
+and request a new one 
+-subnet 10.0.2.0 netmask : when the server starts, it will look at the
+available interfaces. Tell the server not to do anything on our "outside"
+subnet; protect ourselves from being a DHCP server on a network in which we are
+not meant to be. 
+-host client1 : starts a scope where we provide a static mapping between MAC
+address and IP address -> can also be provided as a DNS name which is then
+looked up before giving it to the client
+    fixed address could be IP address or DNS names. Benefit of DNS name is that
+    all the mappings between ethernet MAC addresses and DNS names is contained
+    in the DHCP configuration and all the mappings between DNS and IP addresses
+    are in the DNS. Less error prone! 
+
+
+What are the risks to a network when using DHCP for configuration of network
+details? What can be done about those risks while keeping the benefits of DHCP? 
+-Multiple or rogue DHCP servers. Bigger problems when mistakes are made. 
+-protect using manual assignment? 
+layer-2 Ethernet security 
+

@@ -1,0 +1,67 @@
+Remote Terminal Services
+-SSH powerful for administering both servers and clients
+-most basic use of ssh is as a secure replacement for telnet 
+-scp is a service provided by SSH about copying files and directories.
+-FTP is not a protocol that can have cryptography easily wrapped around it. We can use sftp to provide the feel of a fairly basic ftp client using the scp mechanism 
+-ssh is just another process so you can easily pipe the output. 
+-Can use shot send a backup (output of tar) to a remote machine 
+-sudo apt install opens-server (instead of apt-get)
+-User imposed restrictions on public keys 
+	-restrict what a key can do by inserting some rules at the start of each line 
+	- no-X11-forwarding 
+
+
+Assessment:
+1. Create an SSH key pair on Client1 and demonstrate that you can use it to login to Server1 without a password and use the ssh command in various ways
+
+2. Your server and client configurations must be suitably well-configured 
+- Configuration files stored in /etc/ssh/ . main config = sshd.config which controls the daemon. 
+-ssh_config controls the default behavior of the SSH client program 
+-number of public and private keys for the server 
+-man sshd_config
+	harden configuration and tailor settings of daemon 
+-	not all options may have an effect and not all possible features are compiled into the binary at compile-time
+
+
+- When X11 forwarding is enabled, there may be additional exposure
+             to the server and to client displays if the sshd(8) proxy display
+             is configured to listen on the wildcard address (see
+             X11UseLocalhost below), though this is not the default.  Addi-
+             tionally, the authentication spoofing and authentication data
+             verification and substitution occur on the client side.  The
+             security risk of using X11 forwarding is that the client's X11
+             display server may be exposed to attack when the SSH client
+             requests forwarding (see the warnings for ForwardX11 in
+             ssh_config(5)).  A system administrator may have a stance in
+             which they want to protect clients that may expose themselves to
+             attack by unwittingly requesting X11 forwarding, which can war-
+             rant a ``no'' setting.
+
+             Note that disabling X11 forwarding does not prevent users from
+             forwarding X11 traffic, as users can always install their own
+             forwarders.  X11 forwarding is automatically disabled if UseLogin
+             is enabled.
+
+
+3. Give three useful policies or practices that users should be encouraged or even required to do with regard to the secure use of SSH public keys, particularly with regard to Mac OS X 10.5 “Leopard” 
+
+-good secure password to protect private key 
+-disable ssh login for root
+-allow ssh access only from defined IP addresses in hosts.allow
+-don’t run with no IP restriction 
+-generate keys longer than default 1024 bits 
+-port knocking? 
+-Convert traditional private key format to PKCS: make the derivation of the symmetric encryption key from the passphrase slow to compute - makes it hard for attacker to derive with brute force. 
+	-PKCS - password based key derivation function - algorithm to derive encryption 
+	key from a password by applying a hash function repeatedly.  
+
+
+
+-When Apple released Leopard, they integrated the SSH agent with the local Keychain subsystem
+-Security features such as locking the keychain, includes the SSH keychain, upon a timeout
+-System keychain is generally encrypted with users login password. 
+	-typical qualifier: a typical user will likely have as poor of a password and passphrase as they can
+-When a key is added to the users Keychain, it is first decrypted by asking the user for their passphrase, and then adding the decrypted private key to the user’s keychain. 
+-Remember that the user’s keychain is encrypted on disk with the user’s login password. 
+
+-In Mountain Lion, ssh-agent take care of the security of the keychain for you. 
