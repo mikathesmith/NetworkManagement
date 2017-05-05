@@ -3,6 +3,20 @@ Internal Routing
 -Virtual LANS - implement network topology. 
 -Investigating static routing and the use of the RIP routing protocol 
 
+Vyatta Router - open source virtual router - OpenVN, Quaga
+    Command line interface
+    $ Operational mode - default after login -> nonconfig commands
+    # Config mode - access with configuration -> configure, routing protcool, 
+    interface and firewalll settings, VPN settings 
+    show configuration
+    Supports truncated commands 
+    Help menu - ? at end of command
+    Configuring host name - first vyatta is username @ vyatta is host name
+    set system host-name router
+    cannot exit config mode as uncommited change, type commit (in running configuration)
+    then need to save. (so it sticks after rebooting) type save
+    Need to exit and logout then log back in to see new prompt 
+    set system login user student authentication plaintext-password pw 
     
 Broadcast Domains
     Everywhere a data-link level ethernet broadcast frame would propogate to
