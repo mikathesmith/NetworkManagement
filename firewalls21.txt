@@ -1,0 +1,32 @@
+lab 21 firewalls
+
+Policies
+ -find out what service name is for each port
+ -each service's location and where it should be allowed from
+ -understnad how each type of traffic will cross the router 
+ -decide whether each direction of the firewall should have an allow-by-default or drop-by-defualt policty
+ 
+ Source-NAT on Vyatta
+ -
+ 
+ -as soon as you attach one packet filter to an interface, all interface firewalls change
+ their default behaiour from allow to drop
+ -implement staeful rule for each firewall to allow packets associated to sessions, and logs
+ and drops every other packet it sees. 
+ 
+ -Each interface has three firewalls, in, out, and local. F1 has three interfaces so we
+ eventually want up to 9 packets
+ 
+ -FW_LAN_LOCAL-1024D - packet filter name, rule name and fact that it was logged in 
+ a drop rule. 
+ -IN=eth0 OUT= -infer that it is a local chain because it is going into the router, but
+ not out. In IPTables, would appear on INPUT primary chain rathr than the FORWARD or OUTPUT
+ chain. - connection attempt came from LAN/eth0
+ -SRC=10.18.2.10 DST=10.18.2.1 - source address tells use the packet appears to have come from 
+ client1. (could be spoofed) 
+ -PROTO=TCP 
+ -DPT=22 : knowing the destination port to match traffic
+ -SYN- packet to be understood to be initating an SSH connection
+ 
+ 
+ 
